@@ -1,0 +1,23 @@
+version: '2'
+services:
+    sut:
+        image: curlimages/curl
+        volumes:
+            - ./tests/test.authorization.sh:/test.sh:ro
+        command: /test.sh
+        depends_on:
+            - proxy
+    proxy:
+        build: .
+        environment:
+            PROXY_DEST: http://server
+            AUTHORIZATION: dGVzdDp0ZXN0
+        depends_on:
+            - server
+    server:
+        build:
+            context: ./tests
+            dockerfile: authorization.Dockerfile
+        volumes:
+            - ./tests/authorization.conf:/etc/nginx/conf.d/authorization.conf:ro
+            - ./tests/authorization.htpasswd:/htpasswd:ro

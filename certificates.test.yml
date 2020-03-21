@@ -1,0 +1,30 @@
+version: '2'
+services:
+    sut:
+        image: curlimages/curl
+        volumes:
+            - ./tests/test.certs.sh:/test.sh:ro
+        command: /test.sh
+        depends_on:
+            - proxy
+    proxy:
+        build: .
+        environment:
+            PROXY_DEST: https://empty
+            CERTIFICATE_LOCATION: /certs/cert.pem
+            CERTIFICATE_KEY_LOCATION: /certs/key.pem
+        volumes:
+            - certs:/certs:ro
+        depends_on:
+            - certs
+            - empty
+    certs:
+        image: frapsoft/openssl
+        command: req -x509 -newkey rsa:4096 -nodes -keyout /output/key.pem -out output/cert.pem -days 365 -subj '/CN=proxy'
+        volumes:
+            - certs:/output
+    empty:
+        image: alpine
+        command: sleep infinity
+volumes:
+    certs:

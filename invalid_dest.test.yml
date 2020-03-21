@@ -1,0 +1,18 @@
+version: '2'
+services:
+    sut:
+        image: curlimages/curl
+        volumes:
+            - ./tests/test.invalid_dest.sh:/test.sh:ro
+        command: /test.sh
+        depends_on:
+            - proxy
+    proxy:
+        build: .
+        environment:
+            PROXY_DEST: https://empty
+        depends_on:
+            - empty
+    empty:
+        image: alpine
+        command: sleep infinity

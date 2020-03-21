@@ -1,0 +1,11 @@
+version: '2'
+services:
+    sut:
+        image: curlimages/curl
+        volumes:
+            - ./tests/test.invalid.sh:/test.sh:ro
+        command: /test.sh
+        depends_on:
+            - proxy
+    proxy:
+        build: .

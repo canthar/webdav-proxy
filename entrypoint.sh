@@ -32,4 +32,4 @@ fi
 SHELL_FORMAT='$PROXY_DEST $BASIC_AUTH_CONFIG $ALLOW_ORIGIN $AUTHORIZATION_CONFIG $SERVER_NAME $CERTIFICATE_CONFIG $LISTEN_CONFIG'
 envsubst "$SHELL_FORMAT" < /proxy.conf > /etc/nginx/conf.d/proxy.conf
 
-exec nginx -g 'daemon off;'
+exec nginx -g 'daemon off;' "$@"

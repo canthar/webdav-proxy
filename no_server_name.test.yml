@@ -1,0 +1,15 @@
+version: '2'
+services:
+    sut:
+        build: .
+        command: /test.sh
+        volumes:
+            - ./tests/test.server_name.sh:/test.sh:ro
+        environment:
+            PROXY_DEST: http://empty
+            CORRECT_ANSWER: _
+        depends_on:
+            - empty
+    empty:
+        image: alpine
+        command: sleep infinity

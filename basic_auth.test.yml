@@ -1,0 +1,19 @@
+version: '2'
+services:
+    sut:
+        image: curlimages/curl
+        volumes:
+            - ./tests/test.basic_auth.sh:/test.sh:ro
+        command: /test.sh
+        depends_on:
+            - proxy
+    proxy:
+        build: .
+        environment:
+            PROXY_DEST: https://empty
+            HTPASSWD_CONTENT: test:$$apr1$$pvArRB9l$$GsJnPSK.88cTtZQbw5uGs0
+        depends_on:
+            - empty
+    empty:
+        image: alpine
+        command: sleep infinity

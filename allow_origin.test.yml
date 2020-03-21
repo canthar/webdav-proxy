@@ -1,0 +1,21 @@
+version: '2'
+services:
+    sut:
+        image: curlimages/curl
+        volumes:
+            - ./tests/test.check_allow_origin.sh:/test.sh:ro
+        command: /test.sh
+        environment:
+            CORRECT_ANSWER: example.com
+        depends_on:
+            - proxy
+    proxy:
+        build: .
+        environment:
+            PROXY_DEST: https://empty
+            ALLOW_ORIGIN: example.com
+        depends_on:
+            - empty
+    empty:
+        image: alpine
+        command: sleep infinity
